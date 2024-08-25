@@ -1,0 +1,107 @@
+Setting a profile when running a Spring Boot application can be done in several ways, depending on how you're running the application. Below are different methods to set a profile.
+
+### 1. **Using Command-Line Arguments**
+
+You can specify the active profile when running the Spring Boot application from the command line using the `--spring.profiles.active` parameter.
+
+#### Example:
+```bash
+java -jar myapp.jar --spring.profiles.active=prod
+```
+
+If you have multiple profiles, you can specify them as a comma-separated list:
+
+```bash
+java -jar myapp.jar --spring.profiles.active=dev,debug
+```
+
+### 2. **Using Environment Variables**
+
+You can set the active profile by setting the `SPRING_PROFILES_ACTIVE` environment variable.
+
+#### Example:
+On Linux/MacOS:
+```bash
+export SPRING_PROFILES_ACTIVE=prod
+```
+
+On Windows:
+```bash
+set SPRING_PROFILES_ACTIVE=prod
+```
+
+Then, run your Spring Boot application normally.
+
+### 3. **Using Application Properties or YAML**
+
+You can define the active profiles directly in the `application.properties` or `application.yml` file, although this is less dynamic and typically not recommended for production settings.
+
+#### Example (application.properties):
+```properties
+spring.profiles.active=prod
+```
+
+#### Example (application.yml):
+```yaml
+spring:
+  profiles:
+    active: prod
+```
+
+### 4. **Using `application-<profile>.properties` or `application-<profile>.yml`**
+
+Spring Boot automatically loads the profile-specific configuration files based on the active profile. If you run the application with the `prod` profile active, Spring Boot will load `application-prod.properties` or `application-prod.yml` in addition to the default `application.properties` or `application.yml`.
+
+### 5. **Using Maven or Gradle**
+
+If you are building and running your application using Maven or Gradle, you can pass the profile as a parameter.
+
+#### Maven:
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=prod
+```
+
+#### Gradle:
+```bash
+./gradlew bootRun --args='--spring.profiles.active=prod'
+```
+
+### 6. **Using `SpringApplication.setAdditionalProfiles()` in Code**
+
+You can programmatically set the active profile in your `main` method or other initialization code.
+
+#### Example:
+```java
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MyApp {
+    public static void main(String[] args) {
+        SpringApplication app = new SpringApplication(MyApp.class);
+        app.setAdditionalProfiles("prod");
+        app.run(args);
+    }
+}
+```
+
+### 7. **Using Spring Tool Suite (STS) or IntelliJ IDEA**
+
+If you're using an IDE like Spring Tool Suite (STS) or IntelliJ IDEA, you can set the active profile in the run configuration.
+
+#### In IntelliJ IDEA:
+1. Go to `Run` -> `Edit Configurations`.
+2. Select your Spring Boot application configuration.
+3. In the `VM options` or `Program arguments` section, add `-Dspring.profiles.active=prod`.
+4. Apply the changes and run your application.
+
+### Summary:
+
+- **Command-Line Arguments**: Use `--spring.profiles.active=profile`.
+- **Environment Variables**: Set `SPRING_PROFILES_ACTIVE`.
+- **Properties/YAML Files**: Use `spring.profiles.active` in `application.properties` or `application.yml`.
+- **Maven/Gradle**: Pass profile using build tool arguments.
+- **Programmatically**: Use `SpringApplication.setAdditionalProfiles()` in the code.
+- **IDE**: Set profile in the run configuration.
+
+Choose the method that best fits your deployment or development environment.
